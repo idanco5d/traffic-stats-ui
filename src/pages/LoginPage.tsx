@@ -15,7 +15,7 @@ export default function LoginPage() {
         setError(null);
         const provider = new GoogleAuthProvider();
         signInWithPopup(auth, provider)
-            .then(() => navigate('/traffic-stats-table'))
+            .then(() => navigate('/traffic-stats-edit'))
             .catch(() => setError("Sign-in failed. Please try again."))
             .finally(() => setIsLoading(false));
     };

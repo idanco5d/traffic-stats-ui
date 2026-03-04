@@ -1,52 +1,36 @@
-import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import {useState} from 'react';
+import {useQuery} from '@tanstack/react-query';
 import {
-    Box,
-    Container,
-    Typography,
     Alert,
-    Chip,
-    useMediaQuery,
-    useTheme,
+    Box,
     Card,
     CardContent,
-    Skeleton,
+    Chip,
+    Container,
     IconButton,
+    Skeleton,
     Tooltip,
+    Typography,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
-import {
-    TrendingUpOutlined,
-    CalendarTodayOutlined,
-    ViewColumnOutlined,
-    FilterListOutlined,
-    DownloadOutlined,
-} from '@mui/icons-material';
+import {CalendarTodayOutlined, DownloadOutlined, FilterListOutlined, TrendingUpOutlined,} from '@mui/icons-material';
 import {
     DataGrid,
-    useGridApiContext,
     type GridColDef,
-    type GridSortModel,
     type GridRenderCellParams,
-    GridPreferencePanelsValue,
+    type GridSortModel,
+    useGridApiContext,
 } from '@mui/x-data-grid';
-import { fetchStats } from '../api/trafficStats.ts';
+import {fetchStats} from '../api/trafficStats.ts';
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 10;
 
 // Renders inside the DataGrid context — can use useGridApiContext safely
 const HeaderActions = () => {
     const apiRef = useGridApiContext();
     return (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: 'flex-end', width: '100%', pr: 0.5 }}>
-            <Tooltip title="Columns">
-                <IconButton
-                    size="small"
-                    onClick={() => apiRef.current.showPreferences(GridPreferencePanelsValue.columns)}
-                    sx={{ color: 'text.secondary', '&:hover': { color: '#1565c0', bgcolor: 'rgba(21,101,192,0.08)' } }}
-                >
-                    <ViewColumnOutlined sx={{ fontSize: 18 }} />
-                </IconButton>
-            </Tooltip>
             <Tooltip title="Filter">
                 <IconButton
                     size="small"
@@ -79,10 +63,10 @@ const TrafficStatsTablePage = () => {
     ]);
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ['trafficData', page, PAGE_SIZE],
-        queryFn: () => fetchStats(page * PAGE_SIZE),
-        placeholderData: (prev) => prev ?? { data: [], page: 1, totalPages: 1, totalEntries: 0 },
-        initialData: { data: [], page: 1, totalPages: 1, totalEntries: 0 },
+        queryKey: ['trafficData'],
+        queryFn: () => fetchStats(),
+        placeholderData: (prev) => prev ?? [],
+        initialData: [],
     });
 
     const formatDate = (dateStr: string) => {
@@ -94,7 +78,7 @@ const TrafficStatsTablePage = () => {
         });
     };
 
-    const rows = (data?.data ?? []).map((entry, index) => ({
+    const rows = (data ?? []).map((entry, index) => ({
         id: index,
         date: entry.date,
         visits: entry.visits,
@@ -126,7 +110,7 @@ const TrafficStatsTablePage = () => {
                     </Typography>
                 </Box>
             ),
-            sortComparator: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+            sortComparator: (a, b) => a.localeCompare(b),
         },
         {
             field: 'visits',
@@ -139,7 +123,7 @@ const TrafficStatsTablePage = () => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <TrendingUpOutlined sx={{ fontSize: 15, color: '#66bb6a' }} />
                     <Chip
-                        label={params.value.toLocaleString()}
+                        label={params.value}
                         size="small"
                         sx={{
                             bgcolor: 'rgba(21, 101, 192, 0.08)',
@@ -166,7 +150,7 @@ const TrafficStatsTablePage = () => {
                     {formatDate(params.value)}
                 </Typography>
             ),
-            sortComparator: (a, b) => new Date(a).getTime() - new Date(b).getTime(),
+            sortComparator: (a, b) => a.localeCompare(b),
         },
         {
             field: 'visits',
@@ -241,7 +225,7 @@ const TrafficStatsTablePage = () => {
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mt: 0.3 }}>
                             {data
-                                ? `${data.totalEntries.toLocaleString()} total entries`
+                                ? `${data.length.toLocaleString()} total entries`
                                 : 'Loading…'}
                         </Typography>
                     </Box>
@@ -264,8 +248,8 @@ const TrafficStatsTablePage = () => {
                                 onSortModelChange={setSortModel}
                                 paginationModel={{ page, pageSize: PAGE_SIZE }}
                                 onPaginationModelChange={(model) => setPage(model.page)}
-                                rowCount={data?.totalEntries ?? 0}
-                                paginationMode="server"
+                                rowCount={data?.length ?? 0}
+                                paginationMode="client"
                                 pageSizeOptions={[PAGE_SIZE]}
                                 disableRowSelectionOnClick
                                 autoHeight
