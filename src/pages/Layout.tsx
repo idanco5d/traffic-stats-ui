@@ -41,7 +41,7 @@ const navItems = [
     },
 ];
 
-const TrafficStatsLayout = () => {
+const Layout = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -175,4 +175,4 @@ const TrafficStatsLayout = () => {
     );
 };
 
-export default TrafficStatsLayout;
+export default Layout;
