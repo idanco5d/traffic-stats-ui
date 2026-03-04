@@ -4,7 +4,7 @@ import {ProtectedRoute} from "./ProtectedRoute.tsx";
 import TrafficStatsTablePage from "../pages/TrafficStatsTable/TrafficStatsTablePage.tsx";
 import TrafficStatisticsChartPage from "../pages/TrafficStatsChart/TrafficStatsChartPage.tsx";
 import TrafficStatsEditPage from "../pages/TrafficStatsEdit/TrafficStatsEditPage.tsx";
-import Layout from "../pages/Layout.tsx";
+import Layout from "../pages/Layout/Layout.tsx";
 import {DefaultRedirect} from "./DefaultRedirect.tsx";
 
 export const ApplicationRoutes = () => {
