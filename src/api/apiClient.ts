@@ -10,7 +10,6 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(async (config) => {
     const user = auth.currentUser;
-    console.log("current user:", user);
     if (user) {
         const token = await user.getIdToken();
         config.headers.Authorization = `Bearer ${token}`;

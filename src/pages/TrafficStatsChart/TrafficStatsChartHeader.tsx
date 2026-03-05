@@ -44,13 +44,11 @@ const TrafficStatsChartHeader = ({
                 pt: { xs: 2, sm: 2.5 },
                 pb: { xs: 2, sm: 2.5 },
                 display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'flex-start', sm: 'center' },
-                justifyContent: 'space-between',
-                gap: { xs: 2, sm: 0 },
+                flexDirection: 'column',
+                gap: { xs: 2, sm: 1.5 },
             }}
         >
-            {/* Title + stat chips */}
+            {/* Title */}
             <Box>
                 <Typography
                     variant={isMobile ? 'h6' : 'h5'}
@@ -59,9 +57,14 @@ const TrafficStatsChartHeader = ({
                 >
                     Traffic Statistics
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mt: 0.3, mb: 1.5 }}>
+                <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.75)', mt: 0.3 }}>
                     {dataLength ? `${dataLength.toLocaleString()} total entries` : 'Loading…'}
                 </Typography>
+            </Box>
+
+            {/* Stats and View toggle on same row */}
+            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                {/* Stat chips */}
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
                     {statChips.map((chip) => (
                         <Tooltip key={chip.label} title={chip.label}>
@@ -82,49 +85,49 @@ const TrafficStatsChartHeader = ({
                         </Tooltip>
                     ))}
                 </Box>
-            </Box>
 
-            {/* View toggle */}
-            <ToggleButtonGroup
-                value={viewMode}
-                exclusive
-                onChange={(_e, val) => val && onViewModeChange(val)}
-                size="small"
-                sx={{
-                    bgcolor: 'rgba(255,255,255,0.12)',
-                    borderRadius: 2,
-                    border: '1px solid rgba(255,255,255,0.2)',
-                    '& .MuiToggleButton-root': {
-                        color: 'rgba(255,255,255,0.7)',
-                        border: 'none',
-                        px: { xs: 1.5, sm: 2 },
-                        py: 0.75,
-                        fontSize: '0.8rem',
-                        fontWeight: 600,
-                        textTransform: 'none',
-                        gap: 0.5,
-                        '&.Mui-selected': {
-                            bgcolor: 'rgba(255,255,255,0.25)',
-                            color: 'white',
-                            '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
+                {/* View toggle */}
+                <ToggleButtonGroup
+                    value={viewMode}
+                    exclusive
+                    onChange={(_e, val) => val && onViewModeChange(val)}
+                    size="small"
+                    sx={{
+                        bgcolor: 'rgba(255,255,255,0.12)',
+                        borderRadius: 2,
+                        border: '1px solid rgba(255,255,255,0.2)',
+                        '& .MuiToggleButton-root': {
+                            color: 'rgba(255,255,255,0.7)',
+                            border: 'none',
+                            px: { xs: 1.5, sm: 2 },
+                            py: 0.75,
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            textTransform: 'none',
+                            gap: 0.5,
+                            '&.Mui-selected': {
+                                bgcolor: 'rgba(255,255,255,0.25)',
+                                color: 'white',
+                                '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' },
+                            },
+                            '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
                         },
-                        '&:hover': { bgcolor: 'rgba(255,255,255,0.1)' },
-                    },
-                }}
-            >
-                <ToggleButton value="daily">
-                    <CalendarTodayOutlined sx={{ fontSize: 14 }} />
-                    {!isMobile && 'Daily'}
-                </ToggleButton>
-                <ToggleButton value="weekly">
-                    <CalendarViewWeekOutlined sx={{ fontSize: 14 }} />
-                    {!isMobile && 'Weekly'}
-                </ToggleButton>
-                <ToggleButton value="monthly">
-                    <CalendarMonthOutlined sx={{ fontSize: 14 }} />
-                    {!isMobile && 'Monthly'}
-                </ToggleButton>
-            </ToggleButtonGroup>
+                    }}
+                >
+                    <ToggleButton value="daily">
+                        <CalendarTodayOutlined sx={{ fontSize: 14 }} />
+                        {!isMobile && 'Daily'}
+                    </ToggleButton>
+                    <ToggleButton value="weekly">
+                        <CalendarViewWeekOutlined sx={{ fontSize: 14 }} />
+                        {!isMobile && 'Weekly'}
+                    </ToggleButton>
+                    <ToggleButton value="monthly">
+                        <CalendarMonthOutlined sx={{ fontSize: 14 }} />
+                        {!isMobile && 'Monthly'}
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </Box>
         </Box>
     );
 };
